@@ -11,11 +11,45 @@ npm install react-native-qunatcast
 ## Usage
 
 ```js
-import Qunatcast from "react-native-qunatcast";
+import Qunatcast, { onCmpError, onCmpLoaded, onCmpUIShown, onAdditionalVendorConsentGiven, onIABVendorConsentGiven, onNonIABVendorConsentGiven } from 'react-native-qunatcast';
 
 // ...
 
-const result = await Qunatcast.multiply(3, 7);
+ Qunatcast.startChoice("Your-P-Code").then(data => console.log(data)).catch(e=>console.log(e))
+
+ Qunatcast.forceDisplayUI().then((data)=>{
+      console.log(data);
+    }).catch(e=>{
+      console.log(e)
+    })
+
+
+
+     //EVENTS
+    onCmpError((data: any)=>{
+      console.log(data);
+    })
+
+    onCmpLoaded((data: any)=>{
+      console.log(data);
+    })
+
+    onCmpUIShown((data: any)=>{
+      console.log(data);
+    })
+
+
+    onAdditionalVendorConsentGiven((data: any)=>{
+      console.log(data);
+    })
+
+    onIABVendorConsentGiven((data: any)=>{
+      console.log(data);
+    })
+
+    onNonIABVendorConsentGiven((data: any)=>{
+      console.log(data);
+    })
 ```
 
 ## Contributing
