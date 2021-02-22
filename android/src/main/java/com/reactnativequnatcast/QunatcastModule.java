@@ -12,12 +12,21 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.quantcast.choicemobile.ChoiceCmp;
+import com.quantcast.choicemobile.ChoiceCmpCallback;
 import com.quantcast.choicemobile.ChoiceCmpViewModel;
 import com.quantcast.choicemobile.ChoiceCmpViewModelFactory;
+import com.quantcast.choicemobile.core.model.ACData;
+import com.quantcast.choicemobile.core.model.TCData;
+import com.quantcast.choicemobile.model.ChoiceError;
+import com.quantcast.choicemobile.model.NonIABData;
+import com.quantcast.choicemobile.model.PingReturn;
+
+import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 
 
-public class QunatcastModule extends ReactContextBaseJavaModule{
+public class QunatcastModule extends ReactContextBaseJavaModule implements ChoiceCmpCallback {
   public final String logKey = "Qunatcast";
 
   private final ReactApplicationContext reactContext;
@@ -25,7 +34,7 @@ public class QunatcastModule extends ReactContextBaseJavaModule{
   private final String packageName;
   private final Activity activity;
 
-  public QunatcastModule(ReactApplicationContext reactContext) {
+  public QunatcastModule(ReactApplicationContext reactContext)  {
     super(reactContext);
     this.reactContext = reactContext;
     this.applicationContext = (Application) reactContext.getApplicationContext();
@@ -41,7 +50,8 @@ public class QunatcastModule extends ReactContextBaseJavaModule{
   @ReactMethod
   public void startChoice(String apiKey, Promise promise){
     try {
-      ChoiceCmp.INSTANCE.startChoice(applicationContext, packageName, apiKey, new QunatcastCallBack(reactContext));
+     ChoiceCmp choiceCmp =  ChoiceCmp.INSTANCE;
+      ChoiceCmp.INSTANCE.startChoice(applicationContext, packageName, apiKey,this);
       promise.resolve("startChoice Start succesfully");
     }catch (Exception e){
       Log.i(logKey,  e.toString());
@@ -63,4 +73,33 @@ public class QunatcastModule extends ReactContextBaseJavaModule{
   }
 
 
+  @Override
+  public void onCmpError(@NotNull ChoiceError choiceError) {
+    Log.i(logKey, "onCmpError");
+  }
+
+  @Override
+  public void onCmpLoaded(@NotNull PingReturn pingReturn) {
+    Log.i(logKey, "onCmpError");
+  }
+
+  @Override
+  public void onCmpUIShown(@NotNull PingReturn pingReturn) {
+    Log.i(logKey, "onCmpError");
+  }
+
+  @Override
+  public void onGoogleVendorConsentGiven(@NotNull ACData acData) {
+    Log.i(logKey, "onCmpError");
+  }
+
+  @Override
+  public void onIABVendorConsentGiven(@NotNull TCData tcData) {
+    Log.i(logKey, "onCmpError");
+  }
+
+  @Override
+  public void onNonIABVendorConsentGiven(@NotNull NonIABData nonIABData) {
+    Log.i(logKey, "onCmpError");
+  }
 }
