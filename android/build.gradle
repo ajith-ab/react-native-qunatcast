@@ -127,10 +127,11 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "com.quantcast.android.measurement:QuantcastAndroidSdk:1.5.2"
-  implementation files('libs/ChoiceMoblie.aar')
+  implementation files('libs/choice-android-cmp-v2.aar')
   implementation 'com.android.support.constraint:constraint-layout:1.1.3'
   implementation 'androidx.fragment:fragment-ktx:1.1.0'
   implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+  implementation 'com.android.support:appcompat-v7:28.0.0'
+  implementation 'com.android.support:recyclerview-v7:21.0.+'
 
 }

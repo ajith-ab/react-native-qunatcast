@@ -8,7 +8,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.quantcast.choicemobile.ChoiceCmpCallback;
-import com.quantcast.choicemobile.core.model.ACData;
 import com.quantcast.choicemobile.core.model.TCData;
 import com.quantcast.choicemobile.model.ChoiceError;
 import com.quantcast.choicemobile.model.NonIABData;
@@ -50,13 +49,6 @@ public class QunatcastCallBack implements ChoiceCmpCallback {
     Log.i(logKey, "onCmpUIShown");
   }
 
-  @Override
-  public void onGoogleVendorConsentGiven(@NotNull ACData acData) {
-    WritableMap params = Arguments.createMap();
-    params.putString("onGoogleVendorConsentGiven", acData.toString() );
-    this.sendEvent(mReactContext, "onGoogleVendorConsentGiven", params);
-    Log.i(logKey,   acData.getAcString());
-  }
 
   @Override
   public void onIABVendorConsentGiven(@NotNull TCData tcData) {

@@ -13,9 +13,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.quantcast.choicemobile.ChoiceCmp;
 import com.quantcast.choicemobile.ChoiceCmpCallback;
-import com.quantcast.choicemobile.ChoiceCmpViewModel;
-import com.quantcast.choicemobile.ChoiceCmpViewModelFactory;
-import com.quantcast.choicemobile.core.model.ACData;
 import com.quantcast.choicemobile.core.model.TCData;
 import com.quantcast.choicemobile.model.ChoiceError;
 import com.quantcast.choicemobile.model.NonIABData;
@@ -51,7 +48,7 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
   public void startChoice(String apiKey, Promise promise){
     try {
      ChoiceCmp choiceCmp =  ChoiceCmp.INSTANCE;
-      ChoiceCmp.INSTANCE.startChoice(applicationContext, packageName, apiKey,this);
+      ChoiceCmp.INSTANCE.startChoice(applicationContext, applicationContext, apiKey,this);
       promise.resolve("startChoice Start succesfully");
     }catch (Exception e){
       Log.i(logKey,  e.toString());
@@ -64,8 +61,6 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
     try {
       ChoiceCmp.INSTANCE.forceDisplayUI(reactContext.getCurrentActivity());
       promise.resolve("forceDisplayUI succesfully");
-
-
     }catch (Exception e){
       Log.i(logKey,  e.getMessage());
       promise.reject("error", e.toString());
@@ -88,10 +83,6 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
     Log.i(logKey, "onCmpError");
   }
 
-  @Override
-  public void onGoogleVendorConsentGiven(@NotNull ACData acData) {
-    Log.i(logKey, "onCmpError");
-  }
 
   @Override
   public void onIABVendorConsentGiven(@NotNull TCData tcData) {
