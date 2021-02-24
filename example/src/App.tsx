@@ -7,7 +7,7 @@ import Qunatcast, { onCmpError, onCmpLoaded, onCmpUIShown, onAdditionalVendorCon
 export default function App() {
 
   React.useEffect(() => {
-    Qunatcast.startChoice("497uf3SngdapB").then(data => console.log(data)).catch(e=>console.log(e))
+    Qunatcast.startChoice("s497uf3SngdapB").then(data => console.log(data)).catch(e=>console.log(e))
 
 
     //EVENTS
