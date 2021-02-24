@@ -4,23 +4,26 @@ import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModel;
-
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.quantcast.choicemobile.ChoiceCmp;
 import com.quantcast.choicemobile.ChoiceCmpCallback;
 import com.quantcast.choicemobile.core.model.TCData;
+import com.quantcast.choicemobile.data.storage.SharedStorageKeys;
+import com.quantcast.choicemobile.di.ServiceLocator;
 import com.quantcast.choicemobile.model.ChoiceError;
 import com.quantcast.choicemobile.model.NonIABData;
 import com.quantcast.choicemobile.model.PingReturn;
+import com.quantcast.choicemobile.presentation.privacy.PrivacyDialog;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
+import org.jetbrains.annotations.Nullable;
 
 
 public class QunatcastModule extends ReactContextBaseJavaModule implements ChoiceCmpCallback {
@@ -47,7 +50,6 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
   @ReactMethod
   public void startChoice(String apiKey, Promise promise){
     try {
-     ChoiceCmp choiceCmp =  ChoiceCmp.INSTANCE;
       ChoiceCmp.INSTANCE.startChoice(applicationContext, applicationContext, apiKey,this);
       promise.resolve("startChoice Start succesfully");
     }catch (Exception e){
@@ -59,6 +61,8 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
   @ReactMethod
   public void forceDisplayUI(Promise promise){
     try {
+      PrivacyDialog.Companion.setTAG(null);
+      ServiceLocator.INSTANCE.getStorage().setStringPreference(SharedStorageKeys.TC_STRING, "");
       ChoiceCmp.INSTANCE.forceDisplayUI(reactContext.getCurrentActivity());
       promise.resolve("forceDisplayUI succesfully");
     }catch (Exception e){
@@ -70,27 +74,51 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
 
   @Override
   public void onCmpError(@NotNull ChoiceError choiceError) {
+    WritableMap params = Arguments.createMap();
+    params.putString("onCmpError", choiceError.getMessage() );
+    this.sendEvent(reactContext, "onCmpError", params);
     Log.i(logKey, "onCmpError");
   }
 
   @Override
   public void onCmpLoaded(@NotNull PingReturn pingReturn) {
-    Log.i(logKey, "onCmpError");
+    WritableMap params = Arguments.createMap();
+    this.sendEvent(reactContext, "onCmpLoaded", params);
+    Log.i(logKey, "onCmpLoaded");
   }
 
   @Override
   public void onCmpUIShown(@NotNull PingReturn pingReturn) {
-    Log.i(logKey, "onCmpError");
+    WritableMap params = Arguments.createMap();
+    params.putString("onCmpUIShown", pingReturn.toString() );
+    this.sendEvent(reactContext, "onCmpUIShown", params);
+    Log.i(logKey, "onCmpUIShown");
   }
 
 
   @Override
   public void onIABVendorConsentGiven(@NotNull TCData tcData) {
-    Log.i(logKey, "onCmpError");
+    WritableMap params = Arguments.createMap();
+    params.putString("onIABVendorConsentGiven", tcData.toString() );
+    this.sendEvent(reactContext, "onIABVendorConsentGiven", params);
+    Log.i(logKey, "onIABVendorConsentGiven");
   }
 
   @Override
   public void onNonIABVendorConsentGiven(@NotNull NonIABData nonIABData) {
-    Log.i(logKey, "onCmpError");
+    WritableMap params = Arguments.createMap();
+    params.putString("onNonIABVendorConsentGiven", nonIABData.toString() );
+    this.sendEvent(reactContext, "onNonIABVendorConsentGiven", params);
+    Log.i(logKey, "onNonIABVendorConsentGiven");
+  }
+
+
+
+  private void sendEvent(ReactContext reactContext,
+                         String eventName,
+                         @Nullable WritableMap params) {
+    reactContext
+      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+      .emit(eventName, params);
   }
 }
