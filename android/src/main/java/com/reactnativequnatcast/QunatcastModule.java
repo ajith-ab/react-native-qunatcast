@@ -25,6 +25,8 @@ import com.quantcast.choicemobile.presentation.privacy.PrivacyDialog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 
 public class QunatcastModule extends ReactContextBaseJavaModule implements ChoiceCmpCallback {
   public final String logKey = "Qunatcast";
@@ -83,6 +85,11 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
   @Override
   public void onCmpLoaded(@NotNull PingReturn pingReturn) {
     WritableMap params = Arguments.createMap();
+    try {
+      params.putString("displayStatus",  pingReturn.getDisplayStatus().getValue().toString());
+    }catch (Exception e){
+      Log.i(logKey, e.toString());
+    }
     this.sendEvent(reactContext, "onCmpLoaded", params);
     Log.i(logKey, "onCmpLoaded");
   }
@@ -90,6 +97,11 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
   @Override
   public void onCmpUIShown(@NotNull PingReturn pingReturn) {
     WritableMap params = Arguments.createMap();
+    try {
+      params.putString("displayStatus",  pingReturn.getDisplayStatus().getValue().toString());
+    }catch (Exception e){
+      Log.i(logKey, e.toString());
+    }
     params.putString("onCmpUIShown", pingReturn.toString() );
     this.sendEvent(reactContext, "onCmpUIShown", params);
     Log.i(logKey, "onCmpUIShown");
@@ -99,6 +111,14 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
   @Override
   public void onIABVendorConsentGiven(@NotNull TCData tcData) {
     WritableMap params = Arguments.createMap();
+    try {
+      params.putString("cmpStatus", tcData.getCmpStatus().toString());
+      params.putString("tc", tcData.getTcString().toString());
+      params.putString("publisherCC", tcData.getPublisherCC().toString());
+      params.putBoolean("isServiceSpecific", tcData.isServiceSpecific());
+    }catch (Exception e){
+        Log.i(logKey, e.toString());
+    }
     params.putString("onIABVendorConsentGiven", tcData.toString() );
     this.sendEvent(reactContext, "onIABVendorConsentGiven", params);
     Log.i(logKey, "onIABVendorConsentGiven");
@@ -107,6 +127,14 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
   @Override
   public void onNonIABVendorConsentGiven(@NotNull NonIABData nonIABData) {
     WritableMap params = Arguments.createMap();
+    try {
+      params.putString("metaData",  nonIABData.getMetadata().toString());
+      params.putInt("hashCode", nonIABData.hashCode());
+      params.putBoolean("HasGlobalScope", nonIABData.getHasGlobalScope());
+      params.putBoolean("GdprApplies",  nonIABData.getGdprApplies());
+    }catch (Exception e){
+      Log.i(logKey, e.toString());
+    }
     params.putString("onNonIABVendorConsentGiven", nonIABData.toString() );
     this.sendEvent(reactContext, "onNonIABVendorConsentGiven", params);
     Log.i(logKey, "onNonIABVendorConsentGiven");

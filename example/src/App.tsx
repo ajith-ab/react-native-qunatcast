@@ -7,9 +7,9 @@ import Qunatcast, { onCmpError, onCmpLoaded, onCmpUIShown, onAdditionalVendorCon
 export default function App() {
 
   React.useEffect(() => {
-    Qunatcast.startChoice("s497uf3SngdapB").then(data => console.log(data)).catch(e=>console.log(e))
+   // Qunatcast.startChoice("s497uf3SngdapB").then(data => console.log(data)).catch(e=>console.log(e))
 
-
+   StartChoice();
     //EVENTS
     onCmpError((data: any)=>{
       console.log(data);
@@ -36,7 +36,7 @@ export default function App() {
     })
   }, []);
 
-  const forceDisplayUi = () => {
+  const forceDisplayUi = ():void  => {
     Qunatcast.forceDisplayUI().then((data)=>{
       console.log(data);
     }).catch(e=>{
@@ -44,10 +44,15 @@ export default function App() {
     })
   }
 
+  const StartChoice = ():void => {
+    Qunatcast.startChoice("497uf3SngdapB").then(data => console.log(data)).catch(e=>console.log(e))
+  }
+
   return (
     <View style={styles.container}>
       <Text>Result:</Text>
       <Button title="forceDisplayUi" onPress={forceDisplayUi} />
+      {/* <Button title="Re Start Choice" onPress={StartChoice} /> */}
     </View>
   );
 }
