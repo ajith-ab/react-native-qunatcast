@@ -128,7 +128,6 @@ public class QunatcastModule extends ReactContextBaseJavaModule implements Choic
   public void onNonIABVendorConsentGiven(@NotNull NonIABData nonIABData) {
     WritableMap params = Arguments.createMap();
     try {
-      params.putString("metaData",  nonIABData.getMetadata().toString());
       params.putInt("hashCode", nonIABData.hashCode());
       params.putBoolean("HasGlobalScope", nonIABData.getHasGlobalScope());
       params.putBoolean("GdprApplies",  nonIABData.getGdprApplies());

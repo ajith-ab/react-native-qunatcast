@@ -45,7 +45,6 @@ open class Qunatcast: RCTEventEmitter,  UIApplicationDelegate , ChoiceCmpDelegat
         print("didReceiveAdditionalConsent")
         let payload = [
             "ac": acData.acString,
-            "description": acData.description,
             "accessibilityLabel": acData.accessibilityLabel
         ]
         self.sendEvent(withName: "onGoogleVendorConsentGiven", body: payload);
